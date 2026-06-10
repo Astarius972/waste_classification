@@ -1,0 +1,48 @@
+# Dependencies
+node_modules/
+frontend/node_modules/
+backend/.venv/
+backend/venv/
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+dist/
+build/
+
+# Environment
+.env
+.env.local
+.env*.local
+backend/.env
+
+# Next.js
+frontend/.next/
+frontend/out/
+
+# Python
+*.so
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+htmlcov/
+.coverage
+
+# ML models (large files — download separately)
+backend/models/*.weights
+backend/models/*.pt
+backend/models/*.onnx
+backend/models/*.cfg
+!backend/models/.gitkeep
+!backend/models/README.md
+
+# IDE & OS
+.idea/
+.vscode/
+*.swp
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+npm-debug.log*

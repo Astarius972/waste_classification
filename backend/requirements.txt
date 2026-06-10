@@ -1,0 +1,25 @@
+# Web API
+fastapi>=0.115.0
+uvicorn[standard]>=0.32.0
+python-multipart>=0.0.12
+python-dotenv>=1.0.1
+
+# Computer vision & ML
+numpy>=1.26.0
+opencv-python-headless>=4.10.0
+pillow>=10.4.0
+
+# YOLO — use ONE of the following approaches:
+# Option A (recommended): Ultralytics YOLOv8+ for easier training/inference
+ultralytics>=8.3.0
+
+# Option B: Pure YOLOv3 via OpenCV DNN (no extra package needed beyond opencv)
+# Download yolov3.weights + yolov3.cfg into backend/models/
+
+# Optional: training & evaluation (uncomment when fine-tuning)
+# pandas>=2.2.0
+# scikit-learn>=1.5.0
+# torch>=2.4.0
+# torchvision>=0.19.0
+# albumentations>=1.4.0
+# joblib>=1.4.0
