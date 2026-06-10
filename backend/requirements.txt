@@ -19,10 +19,12 @@ ultralytics>=8.3.0
 # Training the garbage classifier (scripts/prepare_garbage_dataset.py)
 kagglehub>=0.3.0
 
+# Garbage material classifier (MobileNetV2/EfficientNetB0 fine-tuning + inference)
+torch>=2.4.0
+torchvision>=0.19.0
+
 # Optional: training & evaluation (uncomment when fine-tuning)
 # pandas>=2.2.0
 # scikit-learn>=1.5.0
-# torch>=2.4.0
-# torchvision>=0.19.0
 # albumentations>=1.4.0
 # joblib>=1.4.0

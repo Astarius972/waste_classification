@@ -79,7 +79,7 @@ export function DetectionResults({ detections, loading, error }: DetectionResult
 
         return (
           <motion.article
-            key={`${wasteKey}-${index}-${item.confidence}`}
+            key={`${wasteKey}-${index}`}
             initial={{ opacity: 0, y: 24 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.45, delay: index * 0.08 }}

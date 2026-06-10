@@ -114,7 +114,9 @@ export function CameraScanner() {
 
     canvas.width = width;
     canvas.height = height;
-    setSourceSize({ width, height });
+    setSourceSize((prev) =>
+      prev.width === width && prev.height === height ? prev : { width, height },
+    );
 
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
@@ -170,7 +172,7 @@ export function CameraScanner() {
             <p className="text-sm text-slate-300">{t.scanner.cameraOff}</p>
           </div>
         )}
-        {loading && active && (
+        {loading && active && detections.length === 0 && (
           <div className="absolute inset-x-0 top-0 bg-emerald-500/25 px-3 py-2 text-center text-xs font-semibold text-emerald-100 backdrop-blur-sm">
             {t.results.analyzing}
           </div>
