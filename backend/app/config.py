@@ -26,3 +26,5 @@ YOLOV3_NAMES = BACKEND_ROOT / os.getenv("YOLOV3_NAMES", "models/coco.names")
 CONFIDENCE_THRESHOLD = float(os.getenv("CONFIDENCE_THRESHOLD", "0.25"))
 INFERENCE_IMGSZ = int(os.getenv("INFERENCE_IMGSZ", "960"))
 IOU_THRESHOLD = float(os.getenv("IOU_THRESHOLD", "0.45"))
+# Below this confidence the class label is not trusted: report "unknown" instead.
+MIN_LABEL_CONFIDENCE = float(os.getenv("MIN_LABEL_CONFIDENCE", "0.45"))

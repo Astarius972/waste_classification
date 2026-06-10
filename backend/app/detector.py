@@ -50,6 +50,7 @@ class UltralyticsDetector:
             iou=self.iou,
             imgsz=self.imgsz,
             max_det=20,
+            agnostic_nms=True,
             verbose=False,
         )
         detections: list[Detection] = []

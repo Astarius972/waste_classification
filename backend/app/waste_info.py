@@ -154,7 +154,7 @@ def lookup_waste_info(label: str | None) -> WasteInfo:
     if not label or not str(label).strip():
         return DEFAULT_WASTE_INFO
     normalized = str(label).strip().lower().replace("_", " ")
-    if normalized in ("undefined", "null", "none"):
+    if normalized in ("undefined", "null", "none", "unknown"):
         return DEFAULT_WASTE_INFO
     if normalized in WASTE_KNOWLEDGE:
         return WASTE_KNOWLEDGE[normalized]

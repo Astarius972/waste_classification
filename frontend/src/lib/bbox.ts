@@ -75,6 +75,47 @@ export function getContainMetrics(
   };
 }
 
+function iou(a: BoundingBox, b: BoundingBox): number {
+  const x1 = Math.max(a.x1, b.x1);
+  const y1 = Math.max(a.y1, b.y1);
+  const x2 = Math.min(a.x2, b.x2);
+  const y2 = Math.min(a.y2, b.y2);
+  const inter = Math.max(0, x2 - x1) * Math.max(0, y2 - y1);
+  if (inter <= 0) return 0;
+  const areaA = (a.x2 - a.x1) * (a.y2 - a.y1);
+  const areaB = (b.x2 - b.x1) * (b.y2 - b.y1);
+  return inter / (areaA + areaB - inter);
+}
+
+/**
+ * Smooth bounding boxes between consecutive camera scans to reduce jitter.
+ * New detections matching a previous one (same waste type, IoU > 0.3) get an
+ * exponentially smoothed box instead of jumping to the new position.
+ */
+export function stabilizeDetections<
+  T extends { bbox: BoundingBox; waste_key?: string; label: string },
+>(previous: T[], next: T[], alpha = 0.6): T[] {
+  if (previous.length === 0) return next;
+  return next.map((det) => {
+    const match = previous.find(
+      (prev) =>
+        (prev.waste_key ?? prev.label) === (det.waste_key ?? det.label) &&
+        iou(prev.bbox, det.bbox) > 0.3,
+    );
+    if (!match) return det;
+    const blend = (a: number, b: number) => Math.round(a * alpha + b * (1 - alpha));
+    return {
+      ...det,
+      bbox: {
+        x1: blend(det.bbox.x1, match.bbox.x1),
+        y1: blend(det.bbox.y1, match.bbox.y1),
+        x2: blend(det.bbox.x2, match.bbox.x2),
+        y2: blend(det.bbox.y2, match.bbox.y2),
+      },
+    };
+  });
+}
+
 export function getWasteLabel(label: string, category?: string): string {
   const safe = (label || "").trim();
   if (safe && safe !== "undefined" && safe !== "null") return safe;

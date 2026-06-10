@@ -3,11 +3,16 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { formatMessage, useI18n } from "@/i18n/I18nProvider";
 import { detectFrame } from "@/lib/api";
+import { stabilizeDetections } from "@/lib/bbox";
 import type { Detection } from "@/types/detection";
 import { DetectionOverlay } from "./DetectionOverlay";
 import { DetectionResults } from "./DetectionResults";
 
-const SCAN_INTERVAL_MS = 2500;
+const SCAN_INTERVAL_MS = 1500;
+// Frames are downscaled before upload: the server resizes to ~960px anyway,
+// so sending full HD only wastes bandwidth and adds latency on mobile.
+const MAX_FRAME_DIM = 1024;
+const FRAME_JPEG_QUALITY = 0.85;
 
 async function getCameraStream(facingMode: "environment" | "user") {
   const constraints: MediaStreamConstraints = {
@@ -83,6 +88,7 @@ export function CameraScanner() {
   const flipCamera = useCallback(async () => {
     const next = facingMode === "environment" ? "user" : "environment";
     setFacingMode(next);
+    setDetections([]);
     if (!active) return;
     scanGeneration.current += 1;
     try {
@@ -98,9 +104,13 @@ export function CameraScanner() {
     const canvas = captureRef.current;
     if (!video || !canvas || video.readyState < 2 || inFlight.current) return;
 
-    const width = video.videoWidth;
-    const height = video.videoHeight;
-    if (!width || !height) return;
+    const videoWidth = video.videoWidth;
+    const videoHeight = video.videoHeight;
+    if (!videoWidth || !videoHeight) return;
+
+    const downscale = Math.min(1, MAX_FRAME_DIM / Math.max(videoWidth, videoHeight));
+    const width = Math.round(videoWidth * downscale);
+    const height = Math.round(videoHeight * downscale);
 
     canvas.width = width;
     canvas.height = height;
@@ -110,7 +120,7 @@ export function CameraScanner() {
     if (!ctx) return;
 
     ctx.drawImage(video, 0, 0, width, height);
-    const dataUrl = canvas.toDataURL("image/jpeg", 0.95);
+    const dataUrl = canvas.toDataURL("image/jpeg", FRAME_JPEG_QUALITY);
     const generation = ++scanGeneration.current;
 
     inFlight.current = true;
@@ -120,7 +130,7 @@ export function CameraScanner() {
     try {
       const result = await detectFrame(dataUrl);
       if (generation !== scanGeneration.current) return;
-      setDetections(result.detections);
+      setDetections((prev) => stabilizeDetections(prev, result.detections));
     } catch (err) {
       if (generation !== scanGeneration.current) return;
       setError(err instanceof Error ? err.message : t.results.failed);

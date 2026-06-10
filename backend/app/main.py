@@ -9,7 +9,7 @@ from fastapi import FastAPI, File, HTTPException, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 
-from app.config import CORS_ORIGINS
+from app.config import CORS_ORIGINS, MIN_LABEL_CONFIDENCE
 from app.detector import create_detector, decode_image_bytes
 from app.waste_info import lookup_waste_info
 
@@ -42,6 +42,10 @@ class FramePayload(BaseModel):
 
 def _enrich_detection(label: str, confidence: float, bbox: tuple[int, int, int, int]) -> dict[str, Any]:
     safe_label = (label or "").strip() or "unknown"
+    # Low-confidence class predictions are unreliable: report "unknown object"
+    # instead of a possibly wrong label, but keep the bounding box.
+    if confidence < MIN_LABEL_CONFIDENCE:
+        safe_label = "unknown"
     info = lookup_waste_info(safe_label)
     return {
         "label": safe_label,
