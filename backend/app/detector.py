@@ -38,7 +38,11 @@ class UltralyticsDetector:
     def __init__(self, model_path: Path, conf: float, iou: float, imgsz: int) -> None:
         from ultralytics import YOLO
 
-        self.model = YOLO(str(model_path))
+        # Official model weights (yolov8n.pt, yolo11s.pt, ...) are gitignored,
+        # so they don't exist on fresh deployments. Loading by bare name lets
+        # ultralytics download them automatically.
+        source = str(model_path) if model_path.exists() else model_path.name
+        self.model = YOLO(source)
         self.conf = conf
         self.iou = iou
         self.imgsz = imgsz

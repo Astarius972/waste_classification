@@ -35,6 +35,8 @@ backend/models/*.onnx
 backend/models/*.cfg
 !backend/models/.gitkeep
 !backend/models/README.md
+# Trained garbage classifier is small (~9 MB) and required in deployments
+!backend/models/garbage_classifier.pt
 
 # Training data & runs (regenerate with backend/scripts/)
 backend/datasets/

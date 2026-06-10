@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import base64
+import logging
 from typing import Any
 
 from fastapi import FastAPI, File, HTTPException, UploadFile
@@ -34,9 +35,18 @@ classifier = None
 
 @app.on_event("startup")
 def load_model() -> None:
+    # Never let model loading prevent the server from binding its port
+    # (hosting platforms kill deploys that don't open a port in time).
+    # Endpoints return 503 until the detector is available.
     global detector, classifier
-    detector = create_detector()
-    classifier = create_classifier()
+    try:
+        detector = create_detector()
+    except Exception:
+        logging.exception("Failed to load detector model")
+    try:
+        classifier = create_classifier()
+    except Exception:
+        logging.exception("Failed to load garbage classifier")
 
 
 class FramePayload(BaseModel):
