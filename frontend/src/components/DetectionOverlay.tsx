@@ -1,10 +1,22 @@
 "use client";
 
-import { getContainMetrics, getCoverMetrics, getWasteLabel, mapBBoxToDisplay } from "@/lib/bbox";
-import { getWasteTranslation, resolveWasteKey } from "@/lib/waste";
+import { getContainMetrics, getCoverMetrics, mapBBoxToDisplay } from "@/lib/bbox";
+import { resolveMaterial, resolveWasteKey } from "@/lib/waste";
+import type { WasteMaterial } from "@/types/detection";
 import { useI18n } from "@/i18n/I18nProvider";
 import type { Detection } from "@/types/detection";
 import { useEffect, useRef } from "react";
+
+// Consistent box color per material category so users learn the color coding.
+const MATERIAL_HUES: Record<WasteMaterial, number> = {
+  plastic: 210, // blue
+  metal: 45, // amber
+  glass: 180, // cyan
+  paper: 30, // orange
+  organic: 130, // green
+  hazardous: 0, // red
+  unknown: 270, // purple
+};
 
 interface DetectionOverlayProps {
   detections: Detection[];
@@ -54,16 +66,16 @@ export function DetectionOverlay({
           ? getContainMetrics(sourceWidth, sourceHeight, width, height)
           : getCoverMetrics(sourceWidth, sourceHeight, width, height);
 
-      detections.forEach((detection, index) => {
+      detections.forEach((detection) => {
         const box = mapBBoxToDisplay(detection.bbox, metrics);
         const { left, top, width: wWidth, height: wHeight } = box;
 
         const wasteKey = resolveWasteKey(detection.label, detection.waste_key);
-        const info = getWasteTranslation(wasteKey, t.waste, t.unknownWaste, detection.waste);
-        const label = getWasteLabel(detection.label, info.category);
+        const material = resolveMaterial(wasteKey, detection.material);
+        const label = t.materials[material];
         const pct = Math.round(detection.confidence * 100);
 
-        const hue = (index * 67) % 360;
+        const hue = MATERIAL_HUES[material];
         ctx.strokeStyle = `hsla(${hue}, 90%, 55%, 0.95)`;
         ctx.lineWidth = 2.5;
         ctx.strokeRect(left, top, wWidth, wHeight);

@@ -115,10 +115,3 @@ export function stabilizeDetections<
     };
   });
 }
-
-export function getWasteLabel(label: string, category?: string): string {
-  const safe = (label || "").trim();
-  if (safe && safe !== "undefined" && safe !== "null") return safe;
-  if (category?.trim()) return category;
-  return "object";
-}

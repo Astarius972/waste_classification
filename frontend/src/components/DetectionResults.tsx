@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion";
 import { useI18n } from "@/i18n/I18nProvider";
-import { getWasteTranslation, resolveWasteKey } from "@/lib/waste";
+import { getWasteTranslation, resolveMaterial, resolveWasteKey } from "@/lib/waste";
 import type { Detection } from "@/types/detection";
 
 interface DetectionResultsProps {
@@ -74,6 +74,7 @@ export function DetectionResults({ detections, loading, error }: DetectionResult
 
       {detections.map((item, index) => {
         const wasteKey = resolveWasteKey(item.label, item.waste_key);
+        const material = resolveMaterial(wasteKey, item.material);
         const info = getWasteTranslation(wasteKey, t.waste, t.unknownWaste, item.waste);
 
         return (
@@ -87,9 +88,9 @@ export function DetectionResults({ detections, loading, error }: DetectionResult
             <div className="flex items-start justify-between gap-4 border-b border-white/10 p-5">
               <div>
                 <p className="text-xs uppercase tracking-widest text-emerald-300/80">
-                  {t.results.detectedAs}: {item.label}
+                  {t.results.detectedAs}: {info.category}
                 </p>
-                <h3 className="mt-1 text-xl font-bold text-white">{info.category}</h3>
+                <h3 className="mt-1 text-xl font-bold text-white">{t.materials[material]}</h3>
               </div>
               <ConfidenceRing value={item.confidence} />
             </div>

@@ -101,6 +101,15 @@ const en: Dictionary = {
     disposal: "Proper disposal",
     confidence: "confidence",
   },
+  materials: {
+    plastic: "Plastic",
+    metal: "Metal",
+    glass: "Glass",
+    paper: "Paper",
+    organic: "Organic",
+    hazardous: "Hazardous",
+    unknown: "Unknown object",
+  },
   waste: {
     plastic_bottle: {
       category: "Plastic — PET bottle",

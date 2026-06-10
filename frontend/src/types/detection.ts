@@ -13,11 +13,21 @@ export interface WasteDetails {
   disposal_methods: string;
 }
 
+export type WasteMaterial =
+  | "plastic"
+  | "metal"
+  | "glass"
+  | "paper"
+  | "organic"
+  | "hazardous"
+  | "unknown";
+
 export interface Detection {
   label: string;
   confidence: number;
   bbox: BoundingBox;
   waste_key?: string;
+  material?: WasteMaterial;
   waste: WasteDetails;
 }
 

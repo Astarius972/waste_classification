@@ -1,5 +1,26 @@
 import type { WasteTranslation } from "@/i18n";
-import type { Detection, WasteDetails } from "@/types/detection";
+import type { Detection, WasteDetails, WasteMaterial } from "@/types/detection";
+
+const KEY_TO_MATERIAL: Record<string, WasteMaterial> = {
+  plastic_bottle: "plastic",
+  plastic_bag: "plastic",
+  styrofoam: "plastic",
+  can: "metal",
+  glass_bottle: "glass",
+  paper: "paper",
+  cup: "paper",
+  food_waste: "organic",
+  battery: "hazardous",
+};
+
+/** Resolve the material sorting group (plastic/metal/glass/paper/organic/...). */
+export function resolveMaterial(
+  wasteKey: string,
+  apiMaterial?: string,
+): WasteMaterial {
+  if (apiMaterial && apiMaterial !== "unknown") return apiMaterial as WasteMaterial;
+  return KEY_TO_MATERIAL[wasteKey] ?? "unknown";
+}
 
 const LABEL_TO_KEY: Record<string, string> = {
   bottle: "plastic_bottle",
@@ -82,6 +103,7 @@ export function normalizeDetection(raw: Partial<Detection> & { waste_key?: strin
     confidence,
     bbox,
     waste_key: wasteKey,
+    material: resolveMaterial(wasteKey, raw.material),
     waste: {
       category: waste.category || "",
       decomposition_time: waste.decomposition_time || "",

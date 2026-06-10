@@ -8,6 +8,8 @@ from dataclasses import dataclass
 @dataclass(frozen=True)
 class WasteInfo:
     waste_key: str
+    # Material group used for sorting: plastic | metal | glass | paper | organic | hazardous | unknown
+    material: str
     category: str
     decomposition_time: str
     environmental_impact: str
@@ -20,6 +22,7 @@ class WasteInfo:
 WASTE_KNOWLEDGE: dict[str, WasteInfo] = {
     "plastic bottle": WasteInfo(
         waste_key="plastic_bottle",
+        material="plastic",
         category="Plastic — PET bottle",
         decomposition_time="450–1,000 years",
         environmental_impact=(
@@ -38,6 +41,7 @@ WASTE_KNOWLEDGE: dict[str, WasteInfo] = {
     ),
     "plastic bag": WasteInfo(
         waste_key="plastic_bag",
+        material="plastic",
         category="Plastic — Single-use bag",
         decomposition_time="10–1,000 years (varies by material)",
         environmental_impact=(
@@ -53,6 +57,7 @@ WASTE_KNOWLEDGE: dict[str, WasteInfo] = {
     ),
     "can": WasteInfo(
         waste_key="can",
+        material="metal",
         category="Metal — Aluminum/steel can",
         decomposition_time="80–200 years (aluminum); steel rusts faster in soil",
         environmental_impact=(
@@ -67,6 +72,7 @@ WASTE_KNOWLEDGE: dict[str, WasteInfo] = {
     ),
     "glass bottle": WasteInfo(
         waste_key="glass_bottle",
+        material="glass",
         category="Glass — Bottle/jar",
         decomposition_time="1 million+ years (does not biodegrade)",
         environmental_impact=(
@@ -78,6 +84,7 @@ WASTE_KNOWLEDGE: dict[str, WasteInfo] = {
     ),
     "paper": WasteInfo(
         waste_key="paper",
+        material="paper",
         category="Paper / cardboard",
         decomposition_time="2–6 weeks (under ideal composting conditions)",
         environmental_impact=(
@@ -90,6 +97,7 @@ WASTE_KNOWLEDGE: dict[str, WasteInfo] = {
     ),
     "food waste": WasteInfo(
         waste_key="food_waste",
+        material="organic",
         category="Organic — Food scraps",
         decomposition_time="1 month – 6 months (composting)",
         environmental_impact=(
@@ -101,6 +109,7 @@ WASTE_KNOWLEDGE: dict[str, WasteInfo] = {
     ),
     "battery": WasteInfo(
         waste_key="battery",
+        material="hazardous",
         category="Hazardous — Battery",
         decomposition_time="100+ years; chemicals persist",
         environmental_impact=(
@@ -112,6 +121,7 @@ WASTE_KNOWLEDGE: dict[str, WasteInfo] = {
     ),
     "styrofoam": WasteInfo(
         waste_key="styrofoam",
+        material="plastic",
         category="Plastic — Expanded polystyrene (EPS)",
         decomposition_time="500+ years",
         environmental_impact=(
@@ -123,6 +133,7 @@ WASTE_KNOWLEDGE: dict[str, WasteInfo] = {
     ),
     "cup": WasteInfo(
         waste_key="cup",
+        material="paper",
         category="Plastic / paper cup",
         decomposition_time="20–500 years depending on lining",
         environmental_impact=(
@@ -136,6 +147,7 @@ WASTE_KNOWLEDGE: dict[str, WasteInfo] = {
 
 DEFAULT_WASTE_INFO = WasteInfo(
     waste_key="unknown",
+    material="unknown",
     category="Unidentified waste",
     decomposition_time="Varies widely — verify material type",
     environmental_impact=(

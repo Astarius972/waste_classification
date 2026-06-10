@@ -83,6 +83,15 @@ export interface Dictionary {
     disposal: string;
     confidence: string;
   };
+  materials: {
+    plastic: string;
+    metal: string;
+    glass: string;
+    paper: string;
+    organic: string;
+    hazardous: string;
+    unknown: string;
+  };
   waste: Record<string, WasteTranslation>;
   unknownWaste: WasteTranslation;
 }

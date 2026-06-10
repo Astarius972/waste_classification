@@ -50,6 +50,7 @@ def _enrich_detection(label: str, confidence: float, bbox: tuple[int, int, int, 
     return {
         "label": safe_label,
         "waste_key": info.waste_key,
+        "material": info.material,
         "confidence": round(confidence, 4),
         "bbox": {"x1": bbox[0], "y1": bbox[1], "x2": bbox[2], "y2": bbox[3]},
         "waste": {
