@@ -36,6 +36,11 @@ backend/models/*.cfg
 !backend/models/.gitkeep
 !backend/models/README.md
 
+# Training data & runs (regenerate with backend/scripts/)
+backend/datasets/
+backend/runs/
+yolov8n-cls.pt
+
 # IDE & OS
 .idea/
 .vscode/

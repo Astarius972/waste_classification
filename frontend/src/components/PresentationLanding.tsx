@@ -1,24 +1,10 @@
 "use client";
 
-import dynamic from "next/dynamic";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { useI18n } from "@/i18n/I18nProvider";
 import { ScrollReveal } from "./ScrollReveal";
-import type { WasteModelType } from "./WasteModel3D";
-
-const WasteModel3D = dynamic(
-  () => import("./WasteModel3D").then((m) => m.WasteModel3D),
-  {
-    ssr: false,
-    loading: () => (
-      <div className="flex aspect-[4/3] min-h-[220px] items-center justify-center rounded-2xl bg-slate-900/60 sm:min-h-[280px]">
-        <div className="h-8 w-8 animate-spin rounded-full border-2 border-emerald-400 border-t-transparent" />
-      </div>
-    ),
-  },
-);
 
 const PROBLEM_ICONS = ["🌊", "💨", "🧪", "🦊"];
 const SLIDE_IDS = ["hero", "crisis", "problems", "examples", "cta"];
@@ -52,7 +38,6 @@ function SlideShell({
 
 export function PresentationLanding() {
   const { t } = useI18n();
-  const [model, setModel] = useState<WasteModelType>("bottle");
   const [activeSlide, setActiveSlide] = useState(0);
 
   useEffect(() => {
@@ -89,48 +74,43 @@ export function PresentationLanding() {
       </div>
 
       <SlideShell id="hero" dark className="bg-slate-950 text-white">
-        <div className="grid items-center gap-8 lg:grid-cols-2 lg:gap-14">
-          <ScrollReveal>
-            <motion.div
-              initial={{ opacity: 0, scale: 0.96 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.8 }}
-            >
-              <span className="inline-flex items-center gap-2 rounded-full border border-emerald-400/30 bg-emerald-400/10 px-3 py-1 text-xs font-semibold uppercase tracking-widest text-emerald-300">
-                {t.hero.badge}
+        <ScrollReveal className="mx-auto max-w-3xl text-center">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.96 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.8 }}
+          >
+            <span className="inline-flex items-center gap-2 rounded-full border border-emerald-400/30 bg-emerald-400/10 px-3 py-1 text-xs font-semibold uppercase tracking-widest text-emerald-300">
+              {t.hero.badge}
+            </span>
+            <h1 className="mt-5 text-3xl font-extrabold leading-[1.1] tracking-tight sm:text-4xl md:text-5xl lg:text-6xl">
+              <span className="bg-gradient-to-r from-white via-emerald-100 to-emerald-300 bg-clip-text text-transparent">
+                {t.hero.title}
               </span>
-              <h1 className="mt-5 text-3xl font-extrabold leading-[1.1] tracking-tight sm:text-4xl md:text-5xl lg:text-6xl">
-                <span className="bg-gradient-to-r from-white via-emerald-100 to-emerald-300 bg-clip-text text-transparent">
-                  {t.hero.title}
-                </span>
-              </h1>
-              <p className="mt-5 max-w-xl text-base leading-relaxed text-slate-300 sm:text-lg">
-                {t.hero.subtitle}
-              </p>
-              <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
-                <a
-                  href="#crisis"
-                  className="inline-flex min-h-[48px] items-center justify-center rounded-full bg-emerald-400 px-6 text-sm font-bold text-emerald-950 shadow-lg shadow-emerald-500/25 transition hover:bg-emerald-300"
-                >
-                  {t.hero.cta}
-                </a>
-                <a
-                  href="#scanner"
-                  className="inline-flex min-h-[48px] items-center justify-center rounded-full border border-white/20 bg-white/5 px-6 text-sm font-semibold text-white backdrop-blur transition hover:bg-white/10"
-                >
-                  {t.nav.tryNow}
-                </a>
-              </div>
-              <p className="mt-8 flex items-center gap-2 text-xs uppercase tracking-widest text-emerald-400/70">
-                <span className="inline-block h-6 w-px animate-pulse bg-emerald-400/50" />
-                {t.hero.scrollHint}
-              </p>
-            </motion.div>
-          </ScrollReveal>
-          <ScrollReveal delay={0.15}>
-            <WasteModel3D type="bottle" />
-          </ScrollReveal>
-        </div>
+            </h1>
+            <p className="mx-auto mt-5 max-w-xl text-base leading-relaxed text-slate-300 sm:text-lg">
+              {t.hero.subtitle}
+            </p>
+            <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row sm:flex-wrap">
+              <a
+                href="#crisis"
+                className="inline-flex min-h-[48px] w-full items-center justify-center rounded-full bg-emerald-400 px-6 text-sm font-bold text-emerald-950 shadow-lg shadow-emerald-500/25 transition hover:bg-emerald-300 sm:w-auto"
+              >
+                {t.hero.cta}
+              </a>
+              <a
+                href="#scanner"
+                className="inline-flex min-h-[48px] w-full items-center justify-center rounded-full border border-white/20 bg-white/5 px-6 text-sm font-semibold text-white backdrop-blur transition hover:bg-white/10 sm:w-auto"
+              >
+                {t.nav.tryNow}
+              </a>
+            </div>
+            <p className="mt-10 flex items-center justify-center gap-2 text-xs uppercase tracking-widest text-emerald-400/70">
+              <span className="inline-block h-6 w-px animate-pulse bg-emerald-400/50" />
+              {t.hero.scrollHint}
+            </p>
+          </motion.div>
+        </ScrollReveal>
       </SlideShell>
 
       <SlideShell id="crisis" className="bg-gradient-to-b from-white to-emerald-50/40 text-slate-900 dark:from-zinc-950 dark:to-emerald-950/20 dark:text-zinc-50">
@@ -182,31 +162,32 @@ export function PresentationLanding() {
       </SlideShell>
 
       <SlideShell id="examples" dark className="bg-gradient-to-br from-slate-950 via-emerald-950/80 to-slate-950 text-white">
-        <div className="grid items-center gap-8 lg:grid-cols-2 lg:gap-12">
-          <ScrollReveal>
-            <span className="text-xs font-bold uppercase tracking-[0.2em] text-emerald-300">{t.slides.examples.label}</span>
-            <h2 className="mt-3 text-2xl font-extrabold sm:text-3xl md:text-4xl">{t.slides.examples.title}</h2>
-            <p className="mt-4 text-sm leading-relaxed text-emerald-100/75 sm:text-base">{t.slides.examples.subtitle}</p>
-            <div className="mt-6 flex flex-wrap gap-2 sm:mt-8 sm:gap-3">
-              {(["bottle", "can", "bag"] as const).map((key) => (
-                <button
-                  key={key}
-                  type="button"
-                  onClick={() => setModel(key)}
-                  className={`min-h-[44px] rounded-full px-4 py-2 text-sm font-semibold transition sm:px-5 ${
-                    model === key
-                      ? "bg-emerald-400 text-emerald-950 shadow-lg shadow-emerald-500/30"
-                      : "bg-white/10 text-white hover:bg-white/20"
-                  }`}
-                >
-                  {key === "bottle" ? t.slides.examples.bottle : key === "can" ? t.slides.examples.can : t.slides.examples.bag}
-                </button>
-              ))}
-            </div>
-          </ScrollReveal>
-          <ScrollReveal delay={0.12}>
-            <WasteModel3D type={model} />
-          </ScrollReveal>
+        <ScrollReveal>
+          <span className="text-xs font-bold uppercase tracking-[0.2em] text-emerald-300">{t.slides.examples.label}</span>
+          <h2 className="mt-3 max-w-3xl text-2xl font-extrabold sm:text-3xl md:text-4xl">{t.slides.examples.title}</h2>
+          <p className="mt-4 max-w-2xl text-sm leading-relaxed text-emerald-100/75 sm:text-base">{t.slides.examples.subtitle}</p>
+        </ScrollReveal>
+        <div className="mt-10 grid gap-4 sm:grid-cols-3 sm:gap-6">
+          {[
+            { icon: "🧴", name: t.slides.examples.bottle, time: t.waste.plastic_bottle.decomposition_time },
+            { icon: "🥫", name: t.slides.examples.can, time: t.waste.can.decomposition_time },
+            { icon: "🛍️", name: t.slides.examples.bag, time: t.waste.plastic_bag.decomposition_time },
+          ].map((item, i) => (
+            <ScrollReveal key={item.name} delay={0.08 * i}>
+              <article className="group relative h-full overflow-hidden rounded-2xl border border-white/10 bg-white/5 p-5 backdrop-blur transition hover:-translate-y-1 hover:border-emerald-400/40 sm:p-6">
+                <div className="pointer-events-none absolute -right-6 -top-6 h-24 w-24 rounded-full bg-emerald-400/10 blur-2xl" />
+                <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-emerald-400/15 text-3xl sm:h-16 sm:w-16 sm:text-4xl">
+                  {item.icon}
+                </div>
+                <h3 className="mt-4 text-lg font-bold sm:text-xl">{item.name}</h3>
+                <p className="mt-2 text-xs uppercase tracking-widest text-emerald-300/70">
+                  {t.results.decomposition}
+                </p>
+                <p className="mt-1 text-sm font-semibold text-emerald-200 sm:text-base">{item.time}</p>
+                <div className="absolute bottom-0 left-0 h-1 w-0 bg-gradient-to-r from-emerald-400 to-teal-400 transition-all group-hover:w-full" />
+              </article>
+            </ScrollReveal>
+          ))}
         </div>
       </SlideShell>
 

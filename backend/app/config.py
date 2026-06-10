@@ -28,3 +28,8 @@ INFERENCE_IMGSZ = int(os.getenv("INFERENCE_IMGSZ", "960"))
 IOU_THRESHOLD = float(os.getenv("IOU_THRESHOLD", "0.45"))
 # Below this confidence the class label is not trusted: report "unknown" instead.
 MIN_LABEL_CONFIDENCE = float(os.getenv("MIN_LABEL_CONFIDENCE", "0.45"))
+
+# Second-stage garbage material classifier (trained on the Kaggle dataset).
+# If the weights file is missing the classifier is simply skipped.
+CLASSIFIER_PATH = BACKEND_ROOT / os.getenv("CLASSIFIER_PATH", "models/garbage_classifier.pt")
+CLASSIFIER_MIN_CONF = float(os.getenv("CLASSIFIER_MIN_CONF", "0.55"))

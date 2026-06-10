@@ -9,6 +9,7 @@ from fastapi import FastAPI, File, HTTPException, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 
+from app.classifier import CLS_LABEL_TO_LOOKUP, create_classifier
 from app.config import CORS_ORIGINS, MIN_LABEL_CONFIDENCE
 from app.detector import create_detector, decode_image_bytes
 from app.waste_info import lookup_waste_info
@@ -28,23 +29,31 @@ app.add_middleware(
 )
 
 detector = None
+classifier = None
 
 
 @app.on_event("startup")
 def load_model() -> None:
-    global detector
+    global detector, classifier
     detector = create_detector()
+    classifier = create_classifier()
 
 
 class FramePayload(BaseModel):
     image: str = Field(..., description="Base64-encoded image (with or without data URL prefix)")
 
 
-def _enrich_detection(label: str, confidence: float, bbox: tuple[int, int, int, int]) -> dict[str, Any]:
+def _enrich_detection(
+    label: str,
+    confidence: float,
+    bbox: tuple[int, int, int, int],
+    trusted: bool = False,
+) -> dict[str, Any]:
     safe_label = (label or "").strip() or "unknown"
     # Low-confidence class predictions are unreliable: report "unknown object"
     # instead of a possibly wrong label, but keep the bounding box.
-    if confidence < MIN_LABEL_CONFIDENCE:
+    # Labels confirmed by the material classifier are trusted as-is.
+    if not trusted and confidence < MIN_LABEL_CONFIDENCE:
         safe_label = "unknown"
     info = lookup_waste_info(safe_label)
     return {
@@ -72,7 +81,31 @@ def _run_detection(image_bytes: bytes) -> list[dict[str, Any]]:
         raise HTTPException(status_code=400, detail=str(exc)) from exc
 
     raw = detector.detect(image)
-    return [_enrich_detection(d.label, d.confidence, d.bbox) for d in raw]
+    results: list[dict[str, Any]] = []
+    for d in raw:
+        # Second stage: the material classifier looks at the cropped box and,
+        # when confident, overrides the generic COCO label with the material.
+        cls = classifier.classify_crop(image, d.bbox) if classifier else None
+        if cls is not None:
+            cls_label, cls_conf = cls
+            lookup_label = CLS_LABEL_TO_LOOKUP.get(cls_label, "unknown")
+            results.append(_enrich_detection(lookup_label, cls_conf, d.bbox, trusted=True))
+        else:
+            results.append(_enrich_detection(d.label, d.confidence, d.bbox))
+
+    # Nothing detected (common for close-up shots of trash): classify the
+    # whole image and return one full-frame result when confident.
+    if not results and classifier is not None:
+        cls = classifier.classify(image)
+        if cls is not None:
+            cls_label, cls_conf = cls
+            lookup_label = CLS_LABEL_TO_LOOKUP.get(cls_label, "unknown")
+            if lookup_label != "unknown":
+                h, w = image.shape[:2]
+                results.append(
+                    _enrich_detection(lookup_label, cls_conf, (0, 0, w, h), trusted=True)
+                )
+    return results
 
 
 @app.get("/health")

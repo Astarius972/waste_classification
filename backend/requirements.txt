@@ -16,6 +16,9 @@ ultralytics>=8.3.0
 # Option B: Pure YOLOv3 via OpenCV DNN (no extra package needed beyond opencv)
 # Download yolov3.weights + yolov3.cfg into backend/models/
 
+# Training the garbage classifier (scripts/prepare_garbage_dataset.py)
+kagglehub>=0.3.0
+
 # Optional: training & evaluation (uncomment when fine-tuning)
 # pandas>=2.2.0
 # scikit-learn>=1.5.0
