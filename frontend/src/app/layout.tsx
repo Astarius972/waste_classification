@@ -13,9 +13,24 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "EcoScan — Waste Detection",
+  title: "EcoScan — AI Waste Classification",
   description:
-    "Detect waste with YOLO, then learn decomposition time, environmental impact, and disposal guidance.",
+    "Every piece of waste has a story. EcoScan uses AI to detect and classify waste in real time — plastic, paper, metal, glass, and organic — then shows decomposition time, environmental impact, and the right way to dispose of it.",
+  keywords: [
+    "waste classification",
+    "AI waste detection",
+    "recycling",
+    "YOLOv8",
+    "environmental awareness",
+    "EcoScan",
+  ],
+  openGraph: {
+    title: "EcoScan — AI Waste Classification",
+    description:
+      "Point a camera at any object and let AI sort it — from pixels to environmental insight in under a second.",
+    type: "website",
+    siteName: "EcoScan",
+  },
 };
 
 export const viewport: Viewport = {

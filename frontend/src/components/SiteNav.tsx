@@ -4,9 +4,9 @@ import { useEffect, useState } from "react";
 import { useI18n } from "@/i18n/I18nProvider";
 
 const LINKS = [
-  { href: "#crisis", key: "crisis" as const },
-  { href: "#problems", key: "problems" as const },
-  { href: "#examples", key: "examples" as const },
+  { href: "#problem", key: "problem" as const },
+  { href: "#impact", key: "impact" as const },
+  { href: "#solution", key: "solution" as const },
   { href: "#scanner", key: "scan" as const },
 ];
 

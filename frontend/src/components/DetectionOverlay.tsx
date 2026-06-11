@@ -74,22 +74,62 @@ export function DetectionOverlay({
         const material = resolveMaterial(wasteKey, detection.material);
         const label = t.materials[material];
         const pct = Math.round(detection.confidence * 100);
-
         const hue = MATERIAL_HUES[material];
-        ctx.strokeStyle = `hsla(${hue}, 90%, 55%, 0.95)`;
-        ctx.lineWidth = 2.5;
+
+        // Subtle tinted fill + thin outline
+        ctx.fillStyle = `hsla(${hue}, 85%, 55%, 0.08)`;
+        ctx.fillRect(left, top, wWidth, wHeight);
+        ctx.strokeStyle = `hsla(${hue}, 90%, 60%, 0.55)`;
+        ctx.lineWidth = 1.5;
         ctx.strokeRect(left, top, wWidth, wHeight);
 
-        const tag = `${label} ${pct}%`;
-        ctx.font = "600 12px system-ui, sans-serif";
-        const tagWidth = ctx.measureText(tag).width + 12;
-        const tagHeight = 22;
-        const tagY = top - tagHeight > 0 ? top - tagHeight : top + 4;
+        // Glowing corner brackets (scanner style)
+        const corner = Math.min(22, wWidth * 0.25, wHeight * 0.25);
+        ctx.strokeStyle = `hsla(${hue}, 95%, 62%, 1)`;
+        ctx.lineWidth = 3;
+        ctx.lineCap = "round";
+        ctx.shadowColor = `hsla(${hue}, 95%, 60%, 0.8)`;
+        ctx.shadowBlur = 8;
+        const corners: [number, number, number, number][] = [
+          [left, top + corner, left, top],
+          [left, top, left + corner, top],
+          [left + wWidth - corner, top, left + wWidth, top],
+          [left + wWidth, top, left + wWidth, top + corner],
+          [left, top + wHeight - corner, left, top + wHeight],
+          [left, top + wHeight, left + corner, top + wHeight],
+          [left + wWidth - corner, top + wHeight, left + wWidth, top + wHeight],
+          [left + wWidth, top + wHeight, left + wWidth, top + wHeight - corner],
+        ];
+        for (let c = 0; c < corners.length; c += 2) {
+          ctx.beginPath();
+          ctx.moveTo(corners[c][0], corners[c][1]);
+          ctx.lineTo(corners[c][2], corners[c][3]);
+          ctx.lineTo(corners[c + 1][2], corners[c + 1][3]);
+          ctx.stroke();
+        }
+        ctx.shadowBlur = 0;
 
-        ctx.fillStyle = `hsla(${hue}, 85%, 42%, 0.92)`;
-        ctx.fillRect(left, tagY, tagWidth, tagHeight);
+        // Label pill with confidence
+        const tag = `${label}  ${pct}%`;
+        ctx.font = "700 12px system-ui, sans-serif";
+        const tagWidth = ctx.measureText(tag).width + 18;
+        const tagHeight = 24;
+        const tagY = top - tagHeight - 6 > 0 ? top - tagHeight - 6 : top + 6;
+        const tagX = Math.max(0, Math.min(left, width - tagWidth));
+
+        ctx.beginPath();
+        if (typeof ctx.roundRect === "function") {
+          ctx.roundRect(tagX, tagY, tagWidth, tagHeight, 12);
+        } else {
+          ctx.rect(tagX, tagY, tagWidth, tagHeight);
+        }
+        ctx.fillStyle = `hsla(${hue}, 75%, 30%, 0.92)`;
+        ctx.fill();
+        ctx.strokeStyle = `hsla(${hue}, 90%, 60%, 0.6)`;
+        ctx.lineWidth = 1;
+        ctx.stroke();
         ctx.fillStyle = "#fff";
-        ctx.fillText(tag, left + 6, tagY + 15);
+        ctx.fillText(tag, tagX + 9, tagY + 16);
       });
     };
 

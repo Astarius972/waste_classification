@@ -12,8 +12,14 @@
   --font-mono: var(--font-geist-mono);
 }
 
-html {
-  scroll-behavior: smooth;
+/* Lenis smooth scrolling */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
 }
 
 body {
@@ -23,21 +29,33 @@ body {
   -webkit-tap-highlight-color: transparent;
 }
 
-@media (min-width: 768px) {
-  .presentation-scroll {
-    scroll-snap-type: y proximity;
-  }
-
-  .presentation-scroll > section {
-    scroll-snap-align: start;
-  }
+::selection {
+  background: rgba(52, 211, 153, 0.35);
+  color: #ecfdf5;
 }
 
 ::-webkit-scrollbar {
   width: 10px;
 }
 
+::-webkit-scrollbar-track {
+  background: #020617;
+}
+
 ::-webkit-scrollbar-thumb {
   background: rgba(16, 185, 129, 0.35);
   border-radius: 999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(16, 185, 129, 0.55);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
 }

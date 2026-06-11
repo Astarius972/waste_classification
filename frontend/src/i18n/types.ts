@@ -10,49 +10,63 @@ export interface WasteTranslation {
 
 export interface Dictionary {
   nav: {
-    crisis: string;
-    problems: string;
-    examples: string;
+    problem: string;
+    impact: string;
+    solution: string;
     scan: string;
     tryNow: string;
   };
   hero: {
     badge: string;
-    title: string;
+    title1: string;
+    title2: string;
     subtitle: string;
-    cta: string;
+    ctaPrimary: string;
+    ctaSecondary: string;
     scrollHint: string;
   };
-  slides: {
-    crisis: {
-      label: string;
+  problem: {
+    label: string;
+    title: string;
+    body: string;
+    stats: { value: number; decimals: number; suffix: string; label: string }[];
+    mongolia: {
       title: string;
       body: string;
-      stat1: string;
-      stat1Label: string;
-      stat2: string;
-      stat2Label: string;
-      stat3: string;
-      stat3Label: string;
+      stats: { value: number; decimals: number; suffix: string; label: string }[];
     };
-    problems: {
-      label: string;
-      title: string;
-      items: { title: string; description: string }[];
-    };
-    examples: {
-      label: string;
-      title: string;
-      subtitle: string;
-      bottle: string;
-      can: string;
-      bag: string;
-    };
-    cta: {
-      label: string;
-      title: string;
-      subtitle: string;
-    };
+  };
+  impact: {
+    label: string;
+    title: string;
+    subtitle: string;
+    scaleNote: string;
+  };
+  solution: {
+    label: string;
+    title: string;
+    subtitle: string;
+    steps: { title: string; description: string }[];
+  };
+  about: {
+    storyTitle: string;
+    story: { title: string; description: string }[];
+    techTitle: string;
+  };
+  vision: {
+    label: string;
+    title: string;
+    body: string;
+    points: { title: string; description: string }[];
+    goalTitle: string;
+    goal: string;
+  };
+  footer: {
+    tagline: string;
+    description: string;
+    navTitle: string;
+    techTitle: string;
+    rights: string;
   };
   scanner: {
     badge: string;

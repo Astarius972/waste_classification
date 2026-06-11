@@ -2,72 +2,154 @@ import type { Dictionary } from "./types";
 
 const en: Dictionary = {
   nav: {
-    crisis: "The crisis",
-    problems: "Impact",
-    examples: "Examples",
+    problem: "The problem",
+    impact: "Impact",
+    solution: "Solution",
     scan: "Scan",
     tryNow: "Try EcoScan",
   },
   hero: {
-    badge: "Environmental awareness",
-    title: "Every piece of waste reshapes our planet",
+    badge: "AI for a cleaner planet",
+    title1: "Every Piece of Waste",
+    title2: "Has a Story.",
     subtitle:
-      "Scroll through the story of what happens when we throw things away — then use AI to identify waste and learn how to dispose of it responsibly.",
-    cta: "Start the journey",
+      "EcoScan uses artificial intelligence to recognize waste in real time — and reveals the story behind it: how long it lives, the harm it causes, and the right way to let it go.",
+    ctaPrimary: "Try AI Detection",
+    ctaSecondary: "Learn More",
     scrollHint: "Scroll to explore",
   },
-  slides: {
-    crisis: {
-      label: "Slide 01 — The crisis",
-      title: "What happens if we keep throwing waste away like we do now?",
-      body: "The world generates over 2 billion tonnes of municipal solid waste every year. Without better sorting and recycling, most of it ends up in landfills, open dumps, or the ocean — lingering for decades or centuries.",
-      stat1: "2.01B",
-      stat1Label: "tonnes of waste per year globally",
-      stat2: "33%",
-      stat2Label: "is not managed in an environmentally safe way",
-      stat3: "450+",
-      stat3Label: "years for a plastic bottle to decompose",
-    },
-    problems: {
-      label: "Slide 02 — Environmental damage",
-      title: "What kind of problems does waste cause?",
-      items: [
+  problem: {
+    label: "The Problem",
+    title: "We are drowning in our own waste.",
+    body: "Every year, humanity produces more waste than ever before. Most of it is buried, burned, or lost into nature — where it lingers for decades, centuries, or forever.",
+    stats: [
+      {
+        value: 2.01,
+        decimals: 2,
+        suffix: "B",
+        label: "tonnes of municipal waste generated every single year",
+      },
+      {
+        value: 33,
+        decimals: 0,
+        suffix: "%",
+        label: "is not managed in an environmentally safe way",
+      },
+      {
+        value: 8,
+        decimals: 0,
+        suffix: "M+",
+        label: "tonnes of plastic flow into the ocean annually",
+      },
+    ],
+    mongolia: {
+      title: "And in Mongolia?",
+      body: "The story is close to home. Ulaanbaatar alone sends thousands of tonnes of waste to open landfills every single day — and most of it is never sorted.",
+      stats: [
         {
-          title: "Ocean pollution",
-          description:
-            "Plastic and microplastics harm marine life, enter the food chain, and accumulate in ocean gyres.",
+          value: 1.2,
+          decimals: 1,
+          suffix: "M+",
+          label: "tonnes of waste produced in Ulaanbaatar every year",
         },
         {
-          title: "Greenhouse gases",
-          description:
-            "Organic waste in landfills releases methane — a gas far more potent than CO₂ in the short term.",
+          value: 3000,
+          decimals: 0,
+          suffix: "+",
+          label: "tonnes arrive at the capital's landfills every day",
         },
         {
-          title: "Soil & water contamination",
-          description:
-            "Batteries, chemicals, and plastics leach toxins into groundwater and farmland.",
-        },
-        {
-          title: "Wildlife & health risks",
-          description:
-            "Animals ingest or become entangled in waste; humans face exposure through food, water, and air.",
+          value: 10,
+          decimals: 0,
+          suffix: "%",
+          label: "or less is recycled — the rest is buried or burned",
         },
       ],
     },
-    examples: {
-      label: "Slide 03 — Waste in 3D",
-      title: "Common waste items around us",
-      subtitle: "Rotate and explore — these everyday objects can persist in nature for centuries.",
-      bottle: "Plastic bottle",
-      can: "Metal can",
-      bag: "Plastic bag",
-    },
-    cta: {
-      label: "Slide 04 — Take action",
-      title: "See it. Understand it. Dispose of it correctly.",
-      subtitle:
-        "Use your camera or upload a photo — EcoScan detects waste and tells you how long it lasts, what harm it causes, and how to recycle or dispose of it properly.",
-    },
+  },
+  impact: {
+    label: "Environmental Impact",
+    title: "Nature doesn't forget.",
+    subtitle:
+      "Every material decomposes on its own timeline — and some will outlive everyone reading this by centuries.",
+    scaleNote: "Bar length uses a logarithmic time scale",
+  },
+  solution: {
+    label: "The AI Solution",
+    title: "Meet EcoScan.",
+    subtitle:
+      "Point a camera at any object and let AI do the sorting — from pixels to environmental insight in under a second.",
+    steps: [
+      {
+        title: "Camera",
+        description: "Use a live camera feed or upload a photo from any device.",
+      },
+      {
+        title: "AI Detection",
+        description:
+          "A YOLOv8 detector finds objects, and a fine-tuned classifier identifies the material.",
+      },
+      {
+        title: "Waste Category",
+        description:
+          "The item is sorted into plastic, paper, metal, glass, or organic waste.",
+      },
+      {
+        title: "Environmental Insights",
+        description:
+          "Decomposition time, environmental damage, and the right way to recycle or dispose.",
+      },
+    ],
+  },
+  about: {
+    storyTitle: "The story behind it",
+    story: [
+      {
+        title: "Born at a Science Fair",
+        description:
+          "It all started with a smart waste-sorting bin built for a Science Fair — a bin that could recognize what was thrown into it.",
+      },
+      {
+        title: "Expanded to the web",
+        description:
+          "To make the idea accessible to everyone, the concept was transformed into a web platform that works on any smartphone or computer.",
+      },
+      {
+        title: "A complete full-stack AI solution",
+        description:
+          "A Next.js frontend, Python + FastAPI backend, and a YOLOv8 detection pipeline — deployed on Vercel and Render, combining web development, machine learning, and environmental awareness.",
+      },
+    ],
+    techTitle: "Technologies used",
+  },
+  vision: {
+    label: "Future Vision",
+    title: "Cleaner cities start with a single scan.",
+    body: "AI waste recognition can power smart bins, automated recycling plants, and education at scale — turning every thrown-away object into a teachable moment.",
+    points: [
+      {
+        title: "Smart sorting bins",
+        description: "On-device AI that sorts waste the moment it is thrown away.",
+      },
+      {
+        title: "Education everywhere",
+        description: "Anyone with a phone can learn what their waste does to the planet.",
+      },
+      {
+        title: "Data for cities",
+        description: "Detection data reveals what we throw away — and how to reduce it.",
+      },
+    ],
+    goalTitle: "Our goal",
+    goal: "To make waste sorting easier, increase environmental awareness, and promote responsible recycling through artificial intelligence.",
+  },
+  footer: {
+    tagline: "AI Waste Classification System",
+    description:
+      "A full-stack AI project combining web development, machine learning, and environmental awareness.",
+    navTitle: "Explore",
+    techTitle: "Built with",
+    rights: "Built for a cleaner planet.",
   },
   scanner: {
     badge: "AI detection",
